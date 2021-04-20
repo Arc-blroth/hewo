@@ -1,58 +1,53 @@
 package ai.arcblroth.fabric.hewo;
 
 import ai.arcblroth.fabric.hewo.api.HewoAPI;
-import maow.owo.OwO;
-import maow.owo.util.json.Substitution;
+import dev.maow.owo.api.OwO;
+import dev.maow.owo.api.OwOProvider;
+import dev.maow.owo.util.Options;
+import dev.maow.owo.util.OwOFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Supplier;
 
-public class HewoAPIImpl implements HewoAPI {
+public class HewoAPIImpl implements HewoAPI, OwO {
+    public static final HewoAPIImpl INSTANCE = new HewoAPIImpl();
 
-    public static final HewoAPIImpl HEWO = new HewoAPIImpl();
-    private ArrayList<Supplier<Double>> chances = new ArrayList<>();
+    private final OwO owo = OwOFactory.INSTANCE.create(
+            Options.defaults().setMaxLength(256));
+    private double probability = 0D;
 
-    private HewoAPIImpl() {
+    private HewoAPIImpl() {}
+
+    @Override
+    public void setProbability(Double probability) {
+        this.probability = probability;
     }
 
     @Override
-    public void addOwoProbabilityModifier(Supplier<Double> probabilityModifier) {
-        chances.add(Objects.requireNonNull(probabilityModifier));
+    public boolean shouldTranslate() {
+        double v = ThreadLocalRandom.current().nextDouble();
+        System.out.println(v);
+        System.out.println(probability);
+        return v <= probability;
     }
 
-    public boolean shouldOwo() {
-        return ThreadLocalRandom.current().nextDouble() < chances.stream().map(Supplier::get).max(Double::compareTo).orElse(-1D);
+    @Override
+    public String translate(String s) {
+        return owo.translate(TranslateMode.ALL, s);
     }
 
-    public List<Substitution> getSubstitutions() {
-        return OwO.INSTANCE.getSubstitutions();
+    @Override
+    public String translate(TranslateMode mode, String s) {
+        return owo.translate(mode, s);
     }
 
-    public List<String> getPrefixes() {
-        return OwO.INSTANCE.getPrefixes();
+    @Override
+    public Optional<Options> getOptions() {
+        return owo.getOptions();
     }
 
-    public List<String> getSuffixes() {
-        return OwO.INSTANCE.getSuffixes();
+    @Override
+    public OwOProvider getProvider() {
+        return owo.getProvider();
     }
-
-    public void addSubstitution(Substitution substitution) {
-        OwO.INSTANCE.addSubstitution(substitution);
-    }
-
-    public void addSubstitution(String original, String substitute, boolean byItself) {
-        OwO.INSTANCE.addSubstitution(original, substitute, byItself);
-    }
-
-    public void addPrefix(String prefix) {
-        OwO.INSTANCE.addPrefix(prefix);
-    }
-
-    public void addSuffix(String suffix) {
-        OwO.INSTANCE.addPrefix(suffix);
-    }
-
 }

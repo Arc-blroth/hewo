@@ -4,10 +4,10 @@
   "version": "${version}",
 
   "name": "Hewo!!",
-  "description": "An extremely concerning mod that owofies chat messages, based off of a port of the @zuzak/owo algorithm.",
+  "description": "An extremely concerning mod that owoifies chat messages, based off of a port of the @zuzak/owo algorithm.",
   "authors": [
     "Arc'blroth",
-    "Maowcraft"
+    "MaowImpl"
   ],
 
   "license": "MIT",
@@ -26,19 +26,15 @@
       "ai.arcblroth.fabric.hewo.config.HewoConfigScreen"
     ]
   },
-
   "mixins": [
     "hewo.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.7.8",
     "minecraft": "1.17.x"
   },
-
   "suggests": {
     "okzoomer": "*",
     "libowo": "*"
   }
-
 }
